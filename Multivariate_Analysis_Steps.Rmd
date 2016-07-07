@@ -1,7 +1,6 @@
 ---
 title: "Multivariate Analysis Steps"
-runtime: shiny
-output: html_document
+output: github_document
 ---
 
 Author: Purva Kulkarni
