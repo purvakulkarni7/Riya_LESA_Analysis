@@ -1,0 +1,55 @@
+---
+title: "Multivariate Analysis Steps"
+runtime: shiny
+output: html_document
+---
+
+Author: Purva Kulkarni
+Date: 7 July 2016
+
+This documents contains code snippets to perform multivariate analysis performed on the feature matrix obtained after preprocessed the MS peaklists (Code for preprocessing: `processPeaklists.R`. 
+
+
+Read the featureMatrix from the .csv file, create column and row headers and view
+```{r, echo=TRUE}
+data <- read.csv("FeatureMatrix.csv", header = TRUE)
+data2 <- cbind(data$V1, data$V2, data$V3, data$V4, data$V5, data$V6, data$V7, data$V8, data$V9)
+colnames(data2) <- c("Jant_AD80_1", "Jant_AD80_2", "Jant_AD80_3", "Serratia_PRI_1", "Serratia_PRI_2", "Serratia_PRI_3", "TSB-agar__1", "TSB-agar__2", "TSB-agar__3")
+temp1 <- c(data$X)
+temp1 <- as.character(round(temp1, digits = 4))
+rownames(data2) <- temp1
+head(data2)
+```
+View a matrix of pairwise scatter plots for the data 
+```{r, echo=TRUE}
+pairs(data2)
+```
+
+
+Perform PCA on the feature matrix and view the pca summary, scree plot and score plot
+
+```{r, echo=TRUE}
+data2.pca1 <- princomp(data2, scores = TRUE, cor = TRUE)
+summary(data2.pca1)
+library(factoextra)
+fviz_screeplot(data2.pca1)
+biplot(data2.pca1)
+library(FactoMineR)
+result <- PCA(data2)
+```
+
+
+Visualization of the variables on a factor map
+
+```{r, echo=TRUE}
+fviz_pca_var(data2.pca1)
+```
+
+
+Visualization of correlation plot for the different samples
+
+```{r, echo=TRUE}
+library(psych)
+data2.cor1 <- cor(data2)
+corPlot(data2.cor1)
+```
