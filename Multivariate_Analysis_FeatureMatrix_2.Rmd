@@ -44,6 +44,16 @@ panel.cor <- function(x, y, digits=2, prefix="", cex.cor)
 pairs(data2, lower.panel=panel.smooth, upper.panel=panel.cor)
 ```
 
+Visualize the contribution to the overall variance from individual mass values
+
+```{r, echo = TRUE}
+library(factoextra)
+res.pca <- prcomp(data2,  scale = TRUE)
+fviz_pca_ind(res.pca, col.ind="contrib") +
+scale_color_gradient2(low="white", mid="blue",
+high="red", midpoint=4)
+```
+
 Transform the `data2` matrix, convert the matrx to a `data.frame` and add a `Species` column to the this matrix. 
 
 ```{r, echo=TRUE}
@@ -56,8 +66,14 @@ df <- data2Transformed[c(1:length(data2Transformed)-1)]
 library(ggfortify)
 autoplot(prcomp(df), data = data2Transformed, colour = 'Species', label  =TRUE, label.size = 3, loadings = TRUE, loadings.colour = 'black', loadings.label = TRUE, loadings.label.size = 3, loadings.label.colour = 'Navyblue')
 summary(prcomp(df))
-
-
-
 ```
+
+On performing correlation analysis, it still shows some amount of positive correlation amongst samples
+
+```{r, echo=TRUE}
+library(corrplot)
+source("http://www.sthda.com/upload/rquery_cormat.r")
+rquery.cormat(data2)
+```
+
 

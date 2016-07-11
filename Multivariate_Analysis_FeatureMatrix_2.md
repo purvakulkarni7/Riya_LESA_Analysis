@@ -58,6 +58,25 @@ pairs(data2, lower.panel=panel.smooth, upper.panel=panel.cor)
 
 ![](Multivariate_Analysis_FeatureMatrix_2_files/figure-markdown_github/unnamed-chunk-2-1.png)
 
+Visualize the contribution to the overall variance from individual mass values
+
+``` r
+library(factoextra)
+```
+
+    ## Loading required package: ggplot2
+
+    ## Warning: package 'ggplot2' was built under R version 3.2.4
+
+``` r
+res.pca <- prcomp(data2,  scale = TRUE)
+fviz_pca_ind(res.pca, col.ind="contrib") +
+scale_color_gradient2(low="white", mid="blue",
+high="red", midpoint=4)
+```
+
+![](Multivariate_Analysis_FeatureMatrix_2_files/figure-markdown_github/unnamed-chunk-3-1.png)
+
 Transform the `data2` matrix, convert the matrx to a `data.frame` and add a `Species` column to the this matrix.
 
 ``` r
@@ -72,15 +91,11 @@ library(ggfortify)
 
     ## Warning: package 'ggfortify' was built under R version 3.2.5
 
-    ## Loading required package: ggplot2
-
-    ## Warning: package 'ggplot2' was built under R version 3.2.4
-
 ``` r
 autoplot(prcomp(df), data = data2Transformed, colour = 'Species', label  =TRUE, label.size = 3, loadings = TRUE, loadings.colour = 'black', loadings.label = TRUE, loadings.label.size = 3, loadings.label.colour = 'Navyblue')
 ```
 
-![](Multivariate_Analysis_FeatureMatrix_2_files/figure-markdown_github/unnamed-chunk-3-1.png)
+![](Multivariate_Analysis_FeatureMatrix_2_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
 ``` r
 summary(prcomp(df))
@@ -95,3 +110,86 @@ summary(prcomp(df))
     ## Standard deviation     117.66487 84.45949 55.81905 2.104e-13
     ## Proportion of Variance   0.02339  0.01205  0.00526 0.000e+00
     ## Cumulative Proportion    0.98268  0.99474  1.00000 1.000e+00
+
+On performing correlation analysis, it still shows some amount of positive correlation amongst samples
+
+``` r
+library(corrplot)
+```
+
+    ## Warning: package 'corrplot' was built under R version 3.2.5
+
+``` r
+source("http://www.sthda.com/upload/rquery_cormat.r")
+rquery.cormat(data2)
+```
+
+![](Multivariate_Analysis_FeatureMatrix_2_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+    ## $r
+    ##              TSBagar1 JantAD801 SerratiaPRI2 SerratiaPRI3 TSBagar2
+    ## TSBagar1            1                                             
+    ## JantAD801        0.78         1                                   
+    ## SerratiaPRI2     0.69      0.84            1                      
+    ## SerratiaPRI3     0.69      0.81         0.85            1         
+    ## TSBagar2         0.38      0.42          0.5         0.48        1
+    ## SerratiaPRI1     0.42      0.42         0.49         0.47     0.53
+    ## TSBagar3         0.38       0.5         0.53         0.47     0.56
+    ## JantAD802        0.46       0.6         0.54         0.51     0.47
+    ## JantAD803        0.43       0.6         0.56         0.53     0.48
+    ##              SerratiaPRI1 TSBagar3 JantAD802 JantAD803
+    ## TSBagar1                                              
+    ## JantAD801                                             
+    ## SerratiaPRI2                                          
+    ## SerratiaPRI3                                          
+    ## TSBagar2                                              
+    ## SerratiaPRI1            1                             
+    ## TSBagar3             0.74        1                    
+    ## JantAD802             0.7     0.82         1          
+    ## JantAD803            0.67     0.83      0.93         1
+    ## 
+    ## $p
+    ##              TSBagar1 JantAD801 SerratiaPRI2 SerratiaPRI3 TSBagar2
+    ## TSBagar1            0                                             
+    ## JantAD801           0         0                                   
+    ## SerratiaPRI2        0         0            0                      
+    ## SerratiaPRI3        0         0            0            0         
+    ## TSBagar2            0         0            0            0        0
+    ## SerratiaPRI1        0         0            0            0        0
+    ## TSBagar3            0         0            0            0        0
+    ## JantAD802           0         0            0            0        0
+    ## JantAD803           0         0            0            0        0
+    ##              SerratiaPRI1 TSBagar3 JantAD802 JantAD803
+    ## TSBagar1                                              
+    ## JantAD801                                             
+    ## SerratiaPRI2                                          
+    ## SerratiaPRI3                                          
+    ## TSBagar2                                              
+    ## SerratiaPRI1            0                             
+    ## TSBagar3                0        0                    
+    ## JantAD802               0        0         0          
+    ## JantAD803               0        0         0         0
+    ## 
+    ## $sym
+    ##              TSBagar1 JantAD801 SerratiaPRI2 SerratiaPRI3 TSBagar2
+    ## TSBagar1     1                                                    
+    ## JantAD801    ,        1                                           
+    ## SerratiaPRI2 ,        +         1                                 
+    ## SerratiaPRI3 ,        +         +            1                    
+    ## TSBagar2     .        .         .            .            1       
+    ## SerratiaPRI1 .        .         .            .            .       
+    ## TSBagar3     .        .         .            .            .       
+    ## JantAD802    .        .         .            .            .       
+    ## JantAD803    .        .         .            .            .       
+    ##              SerratiaPRI1 TSBagar3 JantAD802 JantAD803
+    ## TSBagar1                                              
+    ## JantAD801                                             
+    ## SerratiaPRI2                                          
+    ## SerratiaPRI3                                          
+    ## TSBagar2                                              
+    ## SerratiaPRI1 1                                        
+    ## TSBagar3     ,            1                           
+    ## JantAD802    ,            +        1                  
+    ## JantAD803    ,            +        *         1        
+    ## attr(,"legend")
+    ## [1] 0 ' ' 0.3 '.' 0.6 ',' 0.8 '+' 0.9 '*' 0.95 'B' 1
