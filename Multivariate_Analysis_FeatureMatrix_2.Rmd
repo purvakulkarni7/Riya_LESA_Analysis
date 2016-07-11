@@ -1,0 +1,63 @@
+---
+title: "Multivariate Analysis Steps for Feature Matrix 2"
+output: github_document
+---
+
+Author: Purva Kulkarni
+Date: 11 July 2016
+
+This documents contains code snippets to perform multivariate analysis performed on the feature matrix 2 obtained after preprocessed the MS peaklists (Code for preprocessing: `processPeaklists.R`. The preprocessing steps do contain steps perform alignment and calibration. The parameters for baseline correction and peak detection are fine tuned. 
+
+Read the featureMatrix 2 from the .csv file, create column and row headers and view
+
+```{r, echo=TRUE}
+data <- read.csv("FeatureMatrix2.csv", header = TRUE)
+data2 <- cbind(data$V1, data$V2, data$V3, data$V4, data$V5, data$V6, data$V7, data$V8, data$V9)
+colnames(data2) <- c("JantAD801", "JantAD802", "JantAD803", "SerratiaPRI1", "SerratiaPRI2", "SerratiaPRI3", "TSBagar1", "TSBagar2", "TSBagar3")
+temp1 <- c(data$X)
+temp1 <- as.character(round(temp1, digits = 4))
+rownames(data2) <- temp1
+head(data2)
+```
+
+View pair wise scatter plots and their correlations
+
+```{r, echo=TRUE}
+panel.cor <- function(x, y, digits=2, prefix="", cex.cor) 
+{
+  usr <- par("usr"); on.exit(par(usr)) 
+  par(usr = c(0, 1, 0, 1)) 
+  r <- abs(cor(x, y)) 
+  txt <- format(c(r, 0.123456789), digits=digits)[1] 
+  txt <- paste(prefix, txt, sep="") 
+  if(missing(cex.cor)) cex <- 0.8/strwidth(txt) 
+  
+  test <- cor.test(x,y) 
+  # borrowed from printCoefmat
+  Signif <- symnum(test$p.value, corr = FALSE, na = FALSE, 
+                   cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
+                   symbols = c("***", "**", "*", ".", " ")) 
+  
+  text(0.5, 0.5, txt, cex = cex * r) 
+  text(.8, .8, Signif, cex=cex, col=2) 
+}
+pairs(data2, lower.panel=panel.smooth, upper.panel=panel.cor)
+```
+
+Transform the `data2` matrix, convert the matrx to a `data.frame` and add a `Species` column to the this matrix. 
+
+```{r, echo=TRUE}
+data2Transformed <- t(data2)
+Species <- c("JantAD80", "JantAD80", "JantAD80", "SerratiaPR", "SerratiaPR", "SerratiaPR", "TSBAgar", "TSBAgar", "TSBAgar")
+data2Transformed <- as.data.frame(data2Transformed)
+Species <- as.factor(Species)
+data2Transformed <- cbind(data2Transformed, Species)
+df <- data2Transformed[c(1:length(data2Transformed)-1)]
+library(ggfortify)
+autoplot(prcomp(df), data = data2Transformed, colour = 'Species', label  =TRUE, label.size = 4, loadings = TRUE, loadings.colour = 'black', loadings.label = TRUE, loadings.label.size = 4, loadings.label.colour = 'Navyblue')
+summary(prcomp(df))
+
+
+
+```
+
