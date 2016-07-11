@@ -4,6 +4,7 @@
 #' @return Writes a feature matrix to a .csv file
 
 ## Date 4 July 2016
+## Edited: 11 July 2016
 ## Author: Purva Kulkarni
 
 library(MALDIquant)
@@ -31,21 +32,21 @@ processPeaklists <- function()
   plot(peaklistObjectsTransformedSmoothed[[1]], main = "Smoothing")
   
   # Estimate baseline, plot it and subtract it from the data and plot again
-  baseline <- estimateBaseline(peaklistObjectsTransformedSmoothed[[1]], method = "TopHat", halfWindowSize=75)
+  baseline <- estimateBaseline(peaklistObjectsTransformedSmoothed[[1]], method = "TopHat", halfWindowSize=10)
   plot(peaklistObjectsTransformedSmoothed[[1]], main = "Baseline estimation")
   lines(baseline, col = "red", lwd = 2)
-  peaklistObjectsTransformedSmoothedBaseline <- removeBaseline(peaklistObjectsTransformedSmoothed, method = "TopHat", halfWindowSize=75)
+  peaklistObjectsTransformedSmoothedBaseline <- removeBaseline(peaklistObjectsTransformedSmoothed, method = "TopHat", halfWindowSize=10)
   plot(peaklistObjectsTransformedSmoothedBaseline[[1]], main = "Baseline correction")
   
   # Equalize intensity values using intesity calibration
-  peaklistObjectsTransformedSmoothedBaselineCalibrated <- calibrateIntensity(peaklistObjectsTransformedSmoothedBaseline, method = "TIC")
+ # peaklistObjectsTransformedSmoothedBaselineCalibrated <- calibrateIntensity(peaklistObjectsTransformedSmoothedBaseline, method = "TIC")
 
   # Perfrom spectral alignment and plot
-  peaklistObjectsTransformedSmoothedBaselineCalibratedAligned <- alignSpectra(peaklistObjectsTransformedSmoothedBaselineCalibrated, halfWindowSize = 20, SNR = 2, tolerance = 0.02, warpingMethod = "lowess")
-  plot(peaklistObjectsTransformedSmoothedBaselineCalibratedAligned[[1]], main = "Calibration and alignment")
+  #peaklistObjectsTransformedSmoothedBaselineCalibratedAligned <- alignSpectra(peaklistObjectsTransformedSmoothedBaselineCalibrated, halfWindowSize = 20, SNR = 2, tolerance = 0.02, warpingMethod = "lowess")
+ # plot(peaklistObjectsTransformedSmoothedBaselineCalibratedAligned[[1]], main = "Calibration and alignment")
 
   # Average mass spectra/ technical replicates and plot
-  averageSpectra <- averageMassSpectra(peaklistObjectsTransformedSmoothedBaselineCalibratedAligned, method = "mean")
+  averageSpectra <- averageMassSpectra(peaklistObjectsTransformedSmoothedBaseline, method = "mean")
   plot(averageSpectra, main = "Averaged spectra")
   
   # Estimate noise in average spectra and plot 
@@ -55,8 +56,8 @@ processPeaklists <- function()
   #lines(noise[,1], noise[,2]*2, col = "blue")
   
   # Detect peaks in mass peak objects and plot one of the mass peak objects
-  peaks <- detectPeaks(peaklistObjectsTransformedSmoothedBaselineCalibratedAligned, method = "MAD", halfWindowSize = 20, SNR = 2)
-  plot(peaklistObjectsTransformedSmoothedBaselineCalibratedAligned[[1]], xlim = c(600,800), ylim = c(0,0.02), main = "Detected peaks")
+  peaks <- detectPeaks(peaklistObjectsTransformedSmoothedBaseline, method = "SuperSmoother", halfWindowSize = 10, SNR = 1)
+  plot(peaklistObjectsTransformedSmoothedBaseline[[1]], xlim = c(600,800), main = "Detected peaks")
   points(peaks[[1]], col = "red", pch = 18)
   
   # Find similar peaks across mass peak obbjects using peak binning and filter them by removing infrequently occuring peaks
@@ -68,7 +69,7 @@ processPeaklists <- function()
   # Returns a matrix containing intensities of all MassPeaks objects of peaks
   # If a peak is missing the corresponding intensity value of the spectrum is used. If spectra is missing NA is used instead
   # There is an additional attribute "mass" that stores the mass values.
-  featureMatrix <- intensityMatrix(peaks, peaklistObjectsTransformedSmoothedBaselineCalibratedAligned)
+  featureMatrix <- intensityMatrix(peaks, peaklistObjectsTransformedSmoothedBaseline)
   
   # Save feature matrix as csv file
   write.csv(t(featureMatrix), file = "FeatureMatrix.csv")
