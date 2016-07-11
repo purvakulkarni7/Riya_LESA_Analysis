@@ -193,3 +193,10 @@ rquery.cormat(data2)
     ## JantAD803    ,            +        *         1        
     ## attr(,"legend")
     ## [1] 0 ' ' 0.3 '.' 0.6 ',' 0.8 '+' 0.9 '*' 0.95 'B' 1
+
+``` r
+cor.data2 <- cor(data2)
+corrplot(cor.data2, method = "number")
+```
+
+![](Multivariate_Analysis_FeatureMatrix_2_files/figure-markdown_github/unnamed-chunk-5-2.png)

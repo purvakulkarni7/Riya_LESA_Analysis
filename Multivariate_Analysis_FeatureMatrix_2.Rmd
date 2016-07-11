@@ -74,6 +74,8 @@ On performing correlation analysis, it still shows some amount of positive corre
 library(corrplot)
 source("http://www.sthda.com/upload/rquery_cormat.r")
 rquery.cormat(data2)
+cor.data2 <- cor(data2)
+corrplot(cor.data2, method = "number")
 ```
 
 
