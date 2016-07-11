@@ -77,7 +77,7 @@ library(ggfortify)
     ## Warning: package 'ggplot2' was built under R version 3.2.4
 
 ``` r
-autoplot(prcomp(df), data = data2Transformed, colour = 'Species', label  =TRUE, label.size = 4, loadings = TRUE, loadings.colour = 'black', loadings.label = TRUE, loadings.label.size = 4, loadings.label.colour = 'Navyblue')
+autoplot(prcomp(df), data = data2Transformed, colour = 'Species', label  =TRUE, label.size = 3, loadings = TRUE, loadings.colour = 'black', loadings.label = TRUE, loadings.label.size = 3, loadings.label.colour = 'Navyblue')
 ```
 
 ![](Multivariate_Analysis_FeatureMatrix_2_files/figure-markdown_github/unnamed-chunk-3-1.png)
