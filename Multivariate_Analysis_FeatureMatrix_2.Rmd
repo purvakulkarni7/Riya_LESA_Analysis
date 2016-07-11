@@ -54,7 +54,7 @@ Species <- as.factor(Species)
 data2Transformed <- cbind(data2Transformed, Species)
 df <- data2Transformed[c(1:length(data2Transformed)-1)]
 library(ggfortify)
-autoplot(prcomp(df), data = data2Transformed, colour = 'Species', label  =TRUE, label.size = 4, loadings = TRUE, loadings.colour = 'black', loadings.label = TRUE, loadings.label.size = 4, loadings.label.colour = 'Navyblue')
+autoplot(prcomp(df), data = data2Transformed, colour = 'Species', label  =TRUE, label.size = 3, loadings = TRUE, loadings.colour = 'black', loadings.label = TRUE, loadings.label.size = 3, loadings.label.colour = 'Navyblue')
 summary(prcomp(df))
 
 
