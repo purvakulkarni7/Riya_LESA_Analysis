@@ -1,19 +1,19 @@
 ---
-title: "Multivariate Analysis Steps for Feature Matrix 2"
+title: "Multivariate Analysis Steps for Feature Matrix Serratia TSB"
 output: github_document
 ---
 
 Author: Purva Kulkarni
-Date: 11 July 2016
+Date: 13 July 2016
 
-This documents contains code snippets to perform multivariate analysis performed on the feature matrix 2 obtained after preprocessed the MS peaklists (Code for preprocessing: `processPeaklists.R`. The preprocessing steps do contain steps perform alignment and calibration. The parameters for baseline correction and peak detection are fine tuned. 
+This documents contains code snippets to perform multivariate analysis performed on the feature matrix Serratia TSB obtained after preprocessed the MS peaklists for Serratia and TSB agar (Code for preprocessing: `processPeaklists.R`. The preprocessing steps do contain steps perform alignment and calibration. The parameters for baseline correction and peak detection are fine tuned. 
 
-Read the featureMatrix 2 from the .csv file, create column and row headers and view
+Read the `FeatureMatrix_Serratia_TSB.csv`, create column and row headers and view
 
 ```{r, echo=TRUE}
-data <- read.csv("FeatureMatrix2.csv", header = TRUE)
-data2 <- cbind(data$V1, data$V2, data$V3, data$V4, data$V5, data$V6, data$V7, data$V8, data$V9)
-colnames(data2) <- c("JantAD801", "JantAD802", "JantAD803", "SerratiaPRI1", "SerratiaPRI2", "SerratiaPRI3", "TSBagar1", "TSBagar2", "TSBagar3")
+data <- read.csv("FeatureMatrix_Serratia_TSB.csv", header = TRUE)
+data2 <- cbind(data$V1, data$V2, data$V3, data$V4, data$V5, data$V6)
+colnames(data2) <- c("SerratiaPRI1", "SerratiaPRI2", "SerratiaPRI3", "TSBagar1", "TSBagar2", "TSBagar3")
 temp1 <- c(data$X)
 temp1 <- as.character(round(temp1, digits = 4))
 rownames(data2) <- temp1
@@ -58,7 +58,7 @@ Transform the `data2` matrix, convert the matrx to a `data.frame` and add a `Spe
 
 ```{r, echo=TRUE}
 data2Transformed <- t(data2)
-Species <- c("JantAD80", "JantAD80", "JantAD80", "SerratiaPR", "SerratiaPR", "SerratiaPR", "TSBAgar", "TSBAgar", "TSBAgar")
+Species <- c("SerratiaPR", "SerratiaPR", "SerratiaPR", "TSBAgar", "TSBAgar", "TSBAgar")
 data2Transformed <- as.data.frame(data2Transformed)
 Species <- as.factor(Species)
 data2Transformed <- cbind(data2Transformed, Species)
