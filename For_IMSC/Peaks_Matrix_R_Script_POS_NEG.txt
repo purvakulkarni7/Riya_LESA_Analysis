@@ -1,0 +1,24 @@
+dataNEG <- list.files('./DataNEG/', recursive = TRUE, full=T)
+xsetNEG <- xcmsSet(dataNEG, method = 'centWave', ppm = 5, peakwidth = c(5,15))
+xsgNEG<-group(xsetNEG, method="density", bw = 10)
+xsgNEG <- retcor(xsgNEG, method="obiwarp")
+xsgNEG <- group(xsgNEG)
+xsgNEG <- fillPeaks(xsgNEG)
+datNEG <- groupval(xsgNEG, "medret", "into")
+datNEG <- rbind(group = as.character(phenoData(xsgNEG)$class), datNEG)
+write.csv(datNEG, file = "Peaks_Matrix_DataNEG.csv")
+
+
+dataPOS <- list.files('./DataPOS/', recursive = TRUE, full=T)
+xsetPOS <- xcmsSet(dataPOS, method = 'centWave', ppm = 5, peakwidth = c(5,15))
+xsgPOS<-group(xsetPOS, method="density", bw = 10)
+xsgPOS <- retcor(xsgPOS, method="obiwarp")
+xsgPOS <- group(xsgPOS)
+xsgPOS <- fillPeaks(xsgPOS)
+datPOS <- groupval(xsgPOS, "medret", "into")
+datPOS <- rbind(group = as.character(phenoData(xsgPOS)$class), datPOS)
+write.csv(datPOS, file = "Peaks_Matrix_DataPOS.csv")
+
+
+
+
